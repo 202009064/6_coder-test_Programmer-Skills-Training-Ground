@@ -2,8 +2,8 @@ spring:
     application:
         name: coder-test-backend
     datasource:
-        driver-class-name: # <todo> 待生成
-        url: # <todo> url 地址待生成
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        url: jdbc:mysql://localhost:3306/coder-test?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
         username: root
         password: 1234
 
@@ -25,12 +25,12 @@ mybatis-plus:
 springdoc:
     group-configs:
         - group: 'default'
-            paths-to-match: '/**'
-            # 这里改成自己的接口类包名
-            packages-to-scan: com.yupi.codertestbackend.controller
+          paths-to-match: '/**'
+          # 这里改成自己的接口类包名
+          packages-to-scan: com.yupi.codertestbackend.controller
 # knife4j的增强配置，不需要增强可以不配
 knife4j:
     enable: true
     setting:
-        language: zh_cn
+        language: zh-CN
 
