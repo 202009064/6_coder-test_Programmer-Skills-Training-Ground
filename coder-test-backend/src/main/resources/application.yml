@@ -5,7 +5,7 @@ spring:
         driver-class-name: # <todo> 待生成
         url: # <todo> url 地址待生成
         username: root
-        password: 123456
+        password: 1234
 
 server:
     port: 8123
