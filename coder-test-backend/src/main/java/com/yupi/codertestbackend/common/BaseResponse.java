@@ -8,8 +8,8 @@ package com.yupi.codertestbackend.common;
 public class BaseResponse<T> {
 
     private int code;
-    private String message;
     private T data;
+    private String message;
 
     public BaseResponse() {
     }
@@ -19,10 +19,10 @@ public class BaseResponse<T> {
         this.message = message;
     }
 
-    public BaseResponse(int code, String message, T data) {
+    public BaseResponse(int code, T data, String message) {
         this.code = code;
-        this.message = message;
         this.data = data;
+        this.message = message;
     }
 
     public int getCode() {

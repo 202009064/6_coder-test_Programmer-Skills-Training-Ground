@@ -22,6 +22,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     public UserVO register(UserRegisterRequest request) {
         String username = request.getUsername();
         String password = request.getPassword();
+        String checkPassword = request.getCheckPassword();
 
         // 参数校验
         if (username == null || username.isBlank()) {
@@ -29,6 +30,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         if (password == null || password.length() < 6) {
             throw new RuntimeException("密码长度不能少于 6 位");
+        }
+        if (checkPassword == null || !checkPassword.equals(password)) {
+            throw new RuntimeException("两次输入的密码不一致");
         }
 
         // 检查账号是否已存在
@@ -47,7 +51,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         user.setUsername(username);
         user.setPassword(encryptedPassword);
         user.setNickname(request.getNickname() != null ? request.getNickname() : username);
-        user.setSalary(0);
         this.save(user);
 
         return toUserVO(user);
@@ -101,6 +104,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         vo.setUsername(user.getUsername());
         vo.setNickname(user.getNickname());
         vo.setSalary(user.getSalary());
+        vo.setCreateTime(user.getCreateTime());
         return vo;
     }
 }
