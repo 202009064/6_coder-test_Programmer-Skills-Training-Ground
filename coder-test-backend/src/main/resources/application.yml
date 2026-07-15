@@ -1,6 +1,8 @@
 spring:
     application:
         name: coder-test-backend
+    profiles:
+        active: local # 本地环境配置
     datasource:
         driver-class-name: com.mysql.cj.jdbc.Driver
         url: jdbc:mysql://localhost:3306/coder-test?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
@@ -34,4 +36,13 @@ knife4j:
     enable: true
     setting:
         language: zh-CN
+
+# LangChain4j DashScope（阿里云百炼）配置
+langchain4j:
+    dashscope:
+        api-key: sk-ws-H.EMXELIX.ySqu.MEYCIQDz3ikCg0TSHEyjyhErbB8fI9KxMp9bXMejm63D5NyxHwIhAJzVTdzAT18Y0umZucy-RNLUCOCzOgN3EAHDrRIQ5OnQ # ${DASHSCOPE_API_KEY:xxx}
+        model-name: qwen-max
+        temperature: 0.7
+        max-tokens: 8192
+        timeout: 180000 # 180 秒,超时时间
 

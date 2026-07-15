@@ -1,3 +1,7 @@
+### CUSTOM ###
+application-local.yml # 本地环境配置，千万不要开源
+
+
 HELP.md
 target/
 .mvn/wrapper/maven-wrapper.jar
