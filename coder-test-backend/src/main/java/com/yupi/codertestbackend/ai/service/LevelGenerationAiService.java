@@ -20,11 +20,13 @@ public interface LevelGenerationAiService {
             - 关卡难度：{{difficulty}}
 
             请直接返回 JSON，不需要额外解释。
-            """)
+            """
+        )
     GeneratedLevel generateLevel(
             @V("currentSalary") Integer currentSalary,
             @V("targetSalary") Integer targetSalary,
             @V("questionType") String questionType,
             @V("techStack") String techStack,
-            @V("difficulty") String difficulty);
+            @V("difficulty") String difficulty
+        );
 }

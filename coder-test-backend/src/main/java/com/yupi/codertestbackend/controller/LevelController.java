@@ -20,7 +20,9 @@ public class LevelController {
 
     /**
      * AI 生成关卡（根据用户薪资动态调整难度）
-     *
+     * 
+     * AI 大模型完整的调用链为：LevelController → LevelServiceImpl → LevelGenerationAiService → QwenChatModel → 阿里云百炼 API
+     * 
      * @param request 包含 salary 字段的请求体
      * @return 生成的关卡
      */

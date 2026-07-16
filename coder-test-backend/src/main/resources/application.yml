@@ -40,7 +40,7 @@ knife4j:
 # LangChain4j DashScope（阿里云百炼）配置
 langchain4j:
     dashscope:
-        api-key: sk-ws-H.EMXELIX.ySqu.MEYCIQDz3ikCg0TSHEyjyhErbB8fI9KxMp9bXMejm63D5NyxHwIhAJzVTdzAT18Y0umZucy-RNLUCOCzOgN3EAHDrRIQ5OnQ # ${DASHSCOPE_API_KEY:xxx}
+        api-key: ${DASHSCOPE_API_KEY:xxx} # 在coder-test-backend\src\main\resources\application-local.yml中调用了完整的api-key
         model-name: qwen-max
         temperature: 0.7
         max-tokens: 8192
