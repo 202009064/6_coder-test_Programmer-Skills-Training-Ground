@@ -6,7 +6,7 @@ package com.yupi.codertestbackend.common;
 public enum ErrorCode {
 
     SUCCESS(0, "成功"),
-    PARAMS_ERROR(40000, "请求参数错误"),
+    PARAMS_ERROR(40000, "请求参数错误或缺失"),
     NOT_LOGIN(40100, "未登录"),
     SYSTEM_ERROR(50000, "系统内部异常"),
     USER_EXIST(40001, "账号已存在"),
