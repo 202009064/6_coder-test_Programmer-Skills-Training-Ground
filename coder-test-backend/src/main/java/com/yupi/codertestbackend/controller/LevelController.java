@@ -6,11 +6,13 @@ import com.yupi.codertestbackend.common.ResultUtils;
 import com.yupi.codertestbackend.model.entity.Level;
 import com.yupi.codertestbackend.service.LevelService;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * 关卡 Controller
  */
+@Slf4j
 @RestController
 @RequestMapping("/level")
 public class LevelController {
@@ -20,19 +22,19 @@ public class LevelController {
 
     /**
      * AI 生成关卡（根据用户薪资动态调整难度）
-     * 
-     * AI 大模型完整的调用链为：LevelController → LevelServiceImpl → LevelGenerationAiService → QwenChatModel → 阿里云百炼 API
-     * 
-     * @param request 包含 salary 字段的请求体
-     * @return 生成的关卡
      */
     @PostMapping("/generate")
     public BaseResponse<Level> generate(@RequestBody SalaryRequest request) {
-        if (request == null || request.getSalary() == null) {
-            throw new RuntimeException(ErrorCode.PARAMS_ERROR.getMessage());
+        try {
+            if (request == null || request.getSalary() == null) {
+                throw new RuntimeException(ErrorCode.PARAMS_ERROR.getMessage());
+            }
+            Level level = levelService.generateLevel(request.getSalary());
+            return ResultUtils.success(level);
+        } catch (Exception e) {
+            log.error("AI 生成关卡失败, salary={}", request != null ? request.getSalary() : null, e);
+            throw new RuntimeException(e.getMessage());
         }
-        Level level = levelService.generateLevel(request.getSalary());
-        return ResultUtils.success(level);
     }
 
     /**
@@ -40,8 +42,13 @@ public class LevelController {
      */
     @GetMapping("/detail")
     public BaseResponse<Level> detail(@RequestParam Long id) {
-        Level level = levelService.getById(id);
-        return ResultUtils.success(level);
+        try {
+            Level level = levelService.getById(id);
+            return ResultUtils.success(level);
+        } catch (Exception e) {
+            log.error("查询关卡失败, id={}", id, e);
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     /**

@@ -9,11 +9,13 @@ import com.yupi.codertestbackend.model.vo.UserVO;
 import com.yupi.codertestbackend.service.UserService;
 import jakarta.annotation.Resource;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 /**
  * 用户 Controller
  */
+@Slf4j
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -26,8 +28,13 @@ public class UserController {
      */
     @PostMapping("/register")
     public BaseResponse<UserVO> register(@RequestBody UserRegisterRequest request) {
-        UserVO userVO = userService.register(request);
-        return ResultUtils.success(userVO);
+        try {
+            UserVO userVO = userService.register(request);
+            return ResultUtils.success(userVO);
+        } catch (Exception e) {
+            log.error("注册失败, username={}", request != null ? request.getUsername() : null, e);
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     /**
@@ -35,9 +42,14 @@ public class UserController {
      */
     @PostMapping("/login")
     public BaseResponse<UserVO> login(@RequestBody UserLoginRequest request, HttpSession session) {
-        UserVO userVO = userService.login(request);
-        session.setAttribute("userId", userVO.getId());
-        return ResultUtils.success(userVO);
+        try {
+            UserVO userVO = userService.login(request);
+            session.setAttribute("userId", userVO.getId());
+            return ResultUtils.success(userVO);
+        } catch (Exception e) {
+            log.error("登录失败, username={}", request != null ? request.getUsername() : null, e);
+            throw new RuntimeException(e.getMessage());
+        }
     }
 
     /**
@@ -45,12 +57,17 @@ public class UserController {
      */
     @PostMapping("/logout")
     public BaseResponse<Void> logout(HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
-            return new BaseResponse<>(ErrorCode.NOT_LOGIN.getCode(), ErrorCode.NOT_LOGIN.getMessage());
+        try {
+            Long userId = (Long) session.getAttribute("userId");
+            if (userId == null) {
+                return new BaseResponse<>(ErrorCode.NOT_LOGIN.getCode(), ErrorCode.NOT_LOGIN.getMessage());
+            }
+            session.removeAttribute("userId");
+            return ResultUtils.success();
+        } catch (Exception e) {
+            log.error("注销失败", e);
+            throw new RuntimeException(e.getMessage());
         }
-        session.removeAttribute("userId");
-        return ResultUtils.success();
     }
 
     /**
@@ -58,11 +75,16 @@ public class UserController {
      */
     @GetMapping("/current")
     public BaseResponse<UserVO> current(HttpSession session) {
-        Long userId = (Long) session.getAttribute("userId");
-        if (userId == null) {
-            return new BaseResponse<>(ErrorCode.NOT_LOGIN.getCode(), ErrorCode.NOT_LOGIN.getMessage());
+        try {
+            Long userId = (Long) session.getAttribute("userId");
+            if (userId == null) {
+                return new BaseResponse<>(ErrorCode.NOT_LOGIN.getCode(), ErrorCode.NOT_LOGIN.getMessage());
+            }
+            UserVO userVO = userService.getCurrentUser(userId);
+            return ResultUtils.success(userVO);
+        } catch (Exception e) {
+            log.error("获取当前用户信息失败", e);
+            throw new RuntimeException(e.getMessage());
         }
-        UserVO userVO = userService.getCurrentUser(userId);
-        return ResultUtils.success(userVO);
     }
 }
