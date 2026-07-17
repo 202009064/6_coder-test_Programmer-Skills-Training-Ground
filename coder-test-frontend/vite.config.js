@@ -8,4 +8,8 @@ export default defineConfig({
     proxy: {
       '/api': {
         target: 'http://localhost:8123',
-        changeOrigin: true, // 主要用于解�
+        changeOrigin: true, // 主要用于解决前端开发时的跨域 (CORS) 问题。
+      }
+    }
+  }
+})

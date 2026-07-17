@@ -38,6 +38,8 @@
       </div>
     </div>
 
+    <h2 class="section-title">平台特色</h2>
+
     <div class="feature-cards">
       <el-row :gutter="20">
         <el-col :span="8">
@@ -73,7 +75,7 @@ import { useUserStore } from '../stores/user'
 const userStore = useUserStore()
 
 function formatSalary(salary) {
-  if (salary >= 10000) return (salary / 10000).toFixed(1) + ' 万/年'
+  if (salary >= 10000) return (salary / 10000).toFixed(1) + ' 万/月'
   return salary + ' 元/月'
 }
 
@@ -106,6 +108,7 @@ const difficultyTagType = computed(() => {
 .no-login { padding: 40px; }
 .no-login p { font-size: 16px; color: #909399; margin-bottom: 20px; }
 .feature-cards { margin-top: 30px; }
+.section-title { text-align: center; font-size: 24px; color: #303133; margin: 30px 0 10px; }
 .feature-cards .el-card { text-align: center; }
 .feature-icon { margin-bottom: 16px; }
 .feature-cards h3 { margin-bottom: 10px; color: #303133; }
