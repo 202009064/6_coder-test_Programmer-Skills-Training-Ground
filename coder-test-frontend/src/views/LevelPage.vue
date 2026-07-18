@@ -32,6 +32,7 @@
             <p v-if="generating" class="generating-hint">
               AI 正在模拟产品经理思考需求，请耐心等待...
             </p>
+            <LoadingArena v-if="generating" class="loading-area" />
           </div>
         </el-card>
       </div>
@@ -133,6 +134,10 @@
             <el-icon><Finished /></el-icon> 提交答案
           </el-button>
         </div>
+        <p v-if="submitting" class="generating-hint">
+          AI 正在评估你的答案，请耐心等待...
+        </p>
+        <LoadingArena v-if="submitting" class="loading-area" />
       </div>
     </div>
   </div>
@@ -145,6 +150,7 @@ import { useUserStore } from "../stores/user";
 import { useLevelStore } from "../stores/level";
 import { generateLevel as generateLevelApi, submitLevel } from "../api";
 import { ElMessage } from "element-plus";
+import LoadingArena from "../components/LoadingArena.vue";
 
 const router = useRouter();
 const userStore = useUserStore();
@@ -285,6 +291,10 @@ async function submitAnswer() {
   margin-top: 16px;
   color: var(--sand-accent);
   font-size: 14px;
+}
+.loading-area {
+  margin: 16px auto 0;
+  max-width: 420px;
 }
 .level-info-card {
   margin-bottom: 20px;
