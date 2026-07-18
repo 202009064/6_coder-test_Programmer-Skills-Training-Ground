@@ -37,6 +37,11 @@ export const useUserStore = defineStore('user', () => {
     user.value = null
   }
 
+  // 清空本地登录态（不调登出接口，供拦截器在 session 失效时调用）
+  function clearUser() {
+    user.value = null
+  }
+
   // 更新薪资（本地更新，不调接口）
   function updateSalary(newSalary) {
     if (user.value) {
@@ -52,6 +57,7 @@ export const useUserStore = defineStore('user', () => {
     doLogin,
     doRegister,
     doLogout,
+    clearUser,
     updateSalary,
   }
 })

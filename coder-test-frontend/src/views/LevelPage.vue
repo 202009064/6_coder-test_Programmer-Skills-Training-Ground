@@ -134,17 +134,19 @@
             <el-icon><Finished /></el-icon> 提交答案
           </el-button>
         </div>
-        <p v-if="submitting" class="generating-hint">
-          AI 正在评估你的答案，请耐心等待...
-        </p>
-        <LoadingArena v-if="submitting" class="loading-area" />
+        <div v-if="submitting" class="submit-loading" ref="submitLoadingRef">
+          <p class="submit-hint">
+            提交成功！AI 正在评估你的答案，请耐心等待...
+          </p>
+          <LoadingArena class="loading-area" />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, nextTick } from "vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "../stores/user";
 import { useLevelStore } from "../stores/level";
@@ -155,6 +157,7 @@ import LoadingArena from "../components/LoadingArena.vue";
 const router = useRouter();
 const userStore = useUserStore();
 const levelStore = useLevelStore();
+const submitLoadingRef = ref(null);
 
 // 每次进入页面都清空上次的关卡状态，确保重新走「生成关卡」流程
 onMounted(() => {
@@ -246,12 +249,14 @@ async function submitAnswer() {
     return;
   }
   submitting.value = true;
+  // 等待加载区域渲染后滚动到可视区，确保用户能看到提示和进度条
+  await nextTick();
+  submitLoadingRef.value?.scrollIntoView({ behavior: "smooth", block: "center" });
   try {
     const res = await submitLevel({
       levelId: levelStore.currentLevel.id,
       userOptions: JSON.stringify(levelStore.selectedOptions),
     });
-    ElMessage.success("提交成功！AI 正在评估你的答案...");
     // 刷新用户信息，获取最新薪资
     await userStore.fetchCurrentUser();
     router.push("/report/" + res.data.id);
@@ -291,6 +296,16 @@ async function submitAnswer() {
   margin-top: 16px;
   color: var(--sand-accent);
   font-size: 14px;
+}
+.submit-loading {
+  margin-top: 24px;
+  text-align: center;
+}
+.submit-hint {
+  margin: 0 0 12px;
+  color: var(--sand-accent);
+  font-size: 15px;
+  letter-spacing: 1px;
 }
 .loading-area {
   margin: 16px auto 0;

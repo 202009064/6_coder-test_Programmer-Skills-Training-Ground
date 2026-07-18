@@ -9,8 +9,17 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue'
 import AppHeader from '../components/AppHeader.vue'
 import AppFooter from '../components/AppFooter.vue'
+import { useUserStore } from '../stores/user'
+
+const userStore = useUserStore()
+
+// 挂载时同步后端真实登录态：刷新可恢复（cookie 在则成功）、session 失效则 header 立刻反映
+onMounted(() => {
+  userStore.fetchCurrentUser()
+})
 </script>
 
 <style scoped>
