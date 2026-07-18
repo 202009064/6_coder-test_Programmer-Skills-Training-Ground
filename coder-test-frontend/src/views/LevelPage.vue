@@ -13,7 +13,7 @@
       <div v-if="!levelStore.currentLevel" class="generate-step">
         <el-card shadow="hover">
           <div class="generate-card">
-            <el-icon :size="48" color="#409eff"><Cpu /></el-icon>
+            <el-icon :size="48" color="#cd9b1d"><Cpu /></el-icon>
             <h2>AI 智能生成关卡</h2>
             <p>
               根据您当前的薪资
@@ -60,20 +60,14 @@
                   :key="index"
                   class="option-item"
                   draggable="true"
+                  @click="addToAnswer(index)"
                   @dragstart="onDragStart(index)"
                   @dragend="onDragEnd"
                   :class="{ dragging: draggingIndex === index }"
                 >
                   <span class="option-index">{{ index + 1 }}</span>
                   <span class="option-text">{{ option }}</span>
-                  <el-button
-                    type="primary"
-                    link
-                    size="small"
-                    @click="addToAnswer(index)"
-                  >
-                    <el-icon><DArrowRight /></el-icon>
-                  </el-button>
+                  <el-icon class="option-arrow"><DArrowRight /></el-icon>
                 </div>
                 <el-empty
                   v-if="availableOptions.length === 0"
@@ -119,7 +113,7 @@
                   v-if="levelStore.selectedOptions.length === 0"
                   class="drop-hint"
                 >
-                  <el-icon :size="40" color="#c0c4cc"><Download /></el-icon>
+                  <el-icon :size="40" color="#bfb090"><Download /></el-icon>
                   <p>将左侧选项拖拽到此处，或点击箭头添加</p>
                 </div>
               </div>
@@ -127,10 +121,11 @@
           </el-col>
         </el-row>
         <div class="submit-area">
-          <el-button @click="resetLevel">重新生成关卡</el-button>
+          <el-button size="large" class="action-btn" @click="resetLevel">重新生成关卡</el-button>
           <el-button
             type="primary"
             size="large"
+            class="action-btn"
             :loading="submitting"
             @click="submitAnswer"
             :disabled="levelStore.selectedOptions.length === 0"
@@ -144,7 +139,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "../stores/user";
 import { useLevelStore } from "../stores/level";
@@ -154,6 +149,11 @@ import { ElMessage } from "element-plus";
 const router = useRouter();
 const userStore = useUserStore();
 const levelStore = useLevelStore();
+
+// 每次进入页面都清空上次的关卡状态，确保重新走「生成关卡」流程
+onMounted(() => {
+  levelStore.clearLevel();
+});
 
 const generating = ref(false);
 const submitting = ref(false);
@@ -274,16 +274,16 @@ async function submitAnswer() {
 }
 .generate-card h2 {
   margin: 16px 0 8px;
-  color: #303133;
+  color: var(--sand-darker);
 }
 .generate-card p {
-  color: #909399;
+  color: var(--sand-dark);
   margin-bottom: 24px;
   font-size: 15px;
 }
 .generating-hint {
   margin-top: 16px;
-  color: #409eff;
+  color: var(--sand-accent);
   font-size: 14px;
 }
 .level-info-card {
@@ -297,10 +297,10 @@ async function submitAnswer() {
 }
 .level-header h2 {
   margin: 0;
-  color: #303133;
+  color: var(--sand-darker);
 }
 .level-desc {
-  color: #606266;
+  color: var(--el-text-color-regular);
   font-size: 15px;
   line-height: 1.8;
   white-space: pre-wrap;
@@ -310,8 +310,25 @@ async function submitAnswer() {
   align-items: center;
   justify-content: space-between;
 }
+/* 两栏等高：el-row 拉伸子项 → el-col 等高 → card 撑满 col → 内容区撑满 body */
+.answer-area {
+  align-items: stretch;
+}
+.answer-area .el-col {
+  display: flex;
+}
+.answer-area .el-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.answer-area :deep(.el-card__body) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
 .options-list {
-  max-height: 500px;
+  flex: 1;
   overflow-y: auto;
 }
 .option-item {
@@ -319,21 +336,29 @@ async function submitAnswer() {
   align-items: center;
   gap: 10px;
   padding: 12px 10px;
-  border: 1px solid #e4e7ed;
+  border: 1px solid var(--sand-border);
   border-radius: 6px;
   margin-bottom: 8px;
-  cursor: grab;
+  cursor: pointer;
   transition: all 0.2s;
-  background: #fff;
+  background: var(--el-fill-color-blank);
 }
 .option-item:hover {
-  border-color: #409eff;
-  background: #ecf5ff;
+  border-color: var(--sand-accent);
+  background: rgba(184, 134, 11, 0.08);
+}
+.option-item:active {
+  cursor: grabbing;
 }
 .option-item.dragging {
   opacity: 0.5;
-  border-color: #409eff;
-  background: #d9ecff;
+  border-color: var(--sand-accent);
+  background: rgba(184, 134, 11, 0.15);
+}
+.option-arrow {
+  flex-shrink: 0;
+  color: var(--sand-accent);
+  font-size: 16px;
 }
 .option-index {
   display: inline-flex;
@@ -342,8 +367,8 @@ async function submitAnswer() {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: #ecf5ff;
-  color: #409eff;
+  background: rgba(184, 134, 11, 0.15);
+  color: var(--sand-accent-hover);
   font-size: 12px;
   font-weight: bold;
   flex-shrink: 0;
@@ -351,28 +376,29 @@ async function submitAnswer() {
 .option-text {
   flex: 1;
   font-size: 14px;
-  color: #303133;
+  color: var(--el-text-color-regular);
   word-break: break-all;
 }
 .answer-drop-zone {
+  flex: 1;
   min-height: 300px;
-  border: 2px dashed #dcdfe6;
+  border: 2px dashed var(--sand-border);
   border-radius: 8px;
   padding: 16px;
   transition: all 0.2s;
-  background: #fafafa;
+  background: rgba(245, 230, 211, 0.5);
 }
 .answer-drop-zone.drag-over {
-  border-color: #409eff;
-  background: #ecf5ff;
+  border-color: var(--sand-accent);
+  background: rgba(184, 134, 11, 0.08);
 }
 .answer-item {
   display: flex;
   align-items: center;
   gap: 10px;
   padding: 10px;
-  background: #f0f9eb;
-  border: 1px solid #c2e7b0;
+  background: rgba(107, 142, 35, 0.1);
+  border: 1px solid rgba(107, 142, 35, 0.4);
   border-radius: 6px;
   margin-bottom: 8px;
 }
@@ -383,7 +409,7 @@ async function submitAnswer() {
   width: 24px;
   height: 24px;
   border-radius: 50%;
-  background: #67c23a;
+  background: #6b8e23;
   color: #fff;
   font-size: 12px;
   font-weight: bold;
@@ -392,13 +418,13 @@ async function submitAnswer() {
 .answer-text {
   flex: 1;
   font-size: 14px;
-  color: #303133;
+  color: var(--el-text-color-regular);
   word-break: break-all;
 }
 .drop-hint {
   text-align: center;
   padding: 60px 20px;
-  color: #c0c4cc;
+  color: #bfb090;
 }
 .drop-hint p {
   margin-top: 10px;
@@ -409,5 +435,8 @@ async function submitAnswer() {
   display: flex;
   gap: 12px;
   justify-content: center;
+}
+.action-btn {
+  width: 180px;
 }
 </style>

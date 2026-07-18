@@ -74,9 +74,9 @@ const pageSize = ref(10)
 const total = ref(0)
 
 function getScoreColor(score) {
-  if (score >= 80) return '#67c23a'
-  if (score >= 60) return '#e6a23c'
-  return '#f56c6c'
+  if (score >= 80) return '#6b8e23'
+  if (score >= 60) return '#b8860b'
+  return '#8b3a3a'
 }
 
 function formatChange(change) {
@@ -113,21 +113,21 @@ onMounted(() => {
 .records-page { max-width: 800px; margin: 0 auto; }
 .no-login { padding: 60px 0; }
 .records-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; }
-.records-header h2 { margin: 0; color: #303133; }
+.records-header h2 { margin: 0; color: var(--sand-darker); letter-spacing: 3px; }
 .empty-area { padding: 60px 0; }
 .record-card-wrapper { margin-bottom: 12px; }
 .record-card { cursor: pointer; transition: all 0.2s; }
-.record-card:hover { border-color: #409eff; transform: translateY(-2px); }
+.record-card:hover { border-color: var(--sand-accent) !important; transform: translateY(-2px); box-shadow: 0 4px 12px rgba(92, 64, 51, 0.15); }
 .record-header { display: flex; align-items: center; gap: 20px; }
 .record-score { display: flex; align-items: baseline; gap: 2px; }
 .score-num { font-size: 36px; font-weight: bold; }
-.score-unit { font-size: 14px; color: #909399; }
+.score-unit { font-size: 14px; color: var(--sand-dark); }
 .record-info { flex: 1; }
-.record-salary { font-size: 14px; color: #606266; margin-bottom: 4px; }
-.record-salary .up { color: #67c23a; font-weight: bold; }
-.record-salary .down { color: #f56c6c; font-weight: bold; }
-.record-salary .same { color: #909399; }
-.record-time { font-size: 12px; color: #909399; }
-.record-arrow { font-size: 20px; color: #c0c4cc; }
+.record-salary { font-size: 14px; color: var(--el-text-color-regular); margin-bottom: 4px; }
+.record-salary .up { color: #6b8e23; font-weight: bold; }
+.record-salary .down { color: #8b3a3a; font-weight: bold; }
+.record-salary .same { color: var(--sand-dark); }
+.record-time { font-size: 12px; color: var(--sand-dark); }
+.record-arrow { font-size: 20px; color: var(--sand-border); }
 .pagination-area { margin-top: 20px; display: flex; justify-content: center; }
 </style>

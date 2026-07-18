@@ -1,22 +1,34 @@
 <template>
   <div class="register-page">
     <div class="register-card">
-      <h2 class="register-title">注册</h2>
+      <div class="register-banner">
+        <el-icon :size="40" color="#cd9b1d"><Flag /></el-icon>
+        <h2 class="register-title">报名从军</h2>
+        <p class="register-subtitle">登记入册，共赴沙场</p>
+      </div>
       <el-form :model="form" :rules="rules" ref="formRef" label-position="top">
         <el-form-item label="账号" prop="username">
-          <el-input v-model="form.username" placeholder="请输入账号" />
+          <el-input v-model="form.username" placeholder="请输入账号">
+            <template #prefix><el-icon><User /></el-icon></template>
+          </el-input>
         </el-form-item>
         <el-form-item label="昵称" prop="nickname">
-          <el-input v-model="form.nickname" placeholder="请输入昵称（选填）" />
+          <el-input v-model="form.nickname" placeholder="请输入昵称（选填）">
+            <template #prefix><el-icon><EditPen /></el-icon></template>
+          </el-input>
         </el-form-item>
         <el-form-item label="密码" prop="password">
-          <el-input v-model="form.password" type="password" placeholder="请输入密码" show-password />
+          <el-input v-model="form.password" type="password" placeholder="请输入密码" show-password>
+            <template #prefix><el-icon><Lock /></el-icon></template>
+          </el-input>
         </el-form-item>
         <el-form-item label="确认密码" prop="checkPassword">
-          <el-input v-model="form.checkPassword" type="password" placeholder="请再次输入密码" show-password />
+          <el-input v-model="form.checkPassword" type="password" placeholder="请再次输入密码" show-password>
+            <template #prefix><el-icon><Lock /></el-icon></template>
+          </el-input>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" :loading="loading" @click="handleRegister" style="width: 100%">
+          <el-button type="primary" :loading="loading" @click="handleRegister" size="large" style="width: 100%">
             注册
           </el-button>
         </el-form-item>
@@ -31,6 +43,7 @@
 <script setup>
 import { reactive, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { User, Lock, EditPen } from '@element-plus/icons-vue'
 import { useUserStore } from '../stores/user'
 import { ElMessage } from 'element-plus'
 
@@ -91,30 +104,57 @@ async function handleRegister() {
 
 <style scoped>
 .register-page {
-  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #1f2d3d 0%, #409eff 100%);
+  padding: 40px 20px;
+  min-height: calc(100vh - 200px);
 }
 
 .register-card {
-  width: 420px;
+  width: 440px;
   padding: 40px;
-  background: #fff;
+  background: var(--sand-card);
+  border: 1px solid var(--sand-border);
   border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 8px 24px rgba(92, 64, 51, 0.2), inset 0 0 0 1px rgba(184, 134, 11, 0.1);
+  position: relative;
+}
+
+.register-card::before {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border: 1px solid rgba(184, 134, 11, 0.25);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.register-banner {
+  text-align: center;
+  margin-bottom: 28px;
 }
 
 .register-title {
   text-align: center;
-  margin-bottom: 30px;
-  color: #303133;
+  margin: 12px 0 6px;
+  color: var(--sand-darker);
+  font-size: 24px;
+  font-weight: 900;
+  letter-spacing: 4px;
+}
+
+.register-subtitle {
+  color: var(--sand-dark);
+  font-size: 14px;
+  margin: 0;
+  letter-spacing: 2px;
 }
 
 .switch-link {
   text-align: center;
-  color: #909399;
+  color: var(--sand-dark);
   font-size: 14px;
+  margin-top: 8px;
 }
 </style>

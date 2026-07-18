@@ -180,7 +180,7 @@ onMounted(async () => {
 .loading-area {
   text-align: center;
   padding: 80px 0;
-  color: #909399;
+  color: var(--sand-dark);
 }
 .loading-icon {
   animation: spin 1s linear infinite;
@@ -196,6 +196,7 @@ onMounted(async () => {
 .loading-area p {
   margin-top: 16px;
   font-size: 16px;
+  letter-spacing: 2px;
 }
 .score-card {
   text-align: center;
@@ -208,16 +209,17 @@ onMounted(async () => {
 .score-value {
   font-size: 48px;
   font-weight: bold;
-  color: #303133;
+  color: var(--sand-darker);
 }
 .score-label {
   font-size: 16px;
-  color: #909399;
+  color: var(--sand-dark);
 }
 .score-title {
   font-size: 20px;
-  color: #303133;
+  color: var(--sand-darker);
   margin-top: 8px;
+  letter-spacing: 3px;
 }
 .comment-card,
 .salary-card,
@@ -233,7 +235,7 @@ onMounted(async () => {
 .standard-text {
   font-size: 15px;
   line-height: 1.8;
-  color: #303133;
+  color: var(--el-text-color-regular);
   white-space: pre-wrap;
 }
 .salary-change {
@@ -243,18 +245,18 @@ onMounted(async () => {
   margin-bottom: 10px;
 }
 .salary-up {
-  color: #67c23a;
+  color: #6b8e23;
 }
 .salary-down {
-  color: #f56c6c;
+  color: #8b3a3a;
 }
 .salary-same {
-  color: #909399;
+  color: var(--sand-dark);
 }
 .salary-after {
   text-align: center;
   font-size: 16px;
-  color: #606266;
+  color: var(--el-text-color-regular);
 }
 .true-options {
   text-align: center;
