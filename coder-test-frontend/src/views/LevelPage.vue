@@ -36,7 +36,7 @@
           </div>
         </el-card>
       </div>
-      <div v-else class="answer-step">
+      <div v-else class="answer-step" :class="{ submitting }">
         <el-card shadow="hover" class="level-info-card">
           <div class="level-header">
             <h2>{{ levelStore.currentLevel.levelName }}</h2>
@@ -60,7 +60,7 @@
                   v-for="(option, index) in availableOptions"
                   :key="index"
                   class="option-item"
-                  draggable="true"
+                  :draggable="!submitting"
                   @click="addToAnswer(index)"
                   @dragstart="onDragStart(index)"
                   @dragend="onDragEnd"
@@ -122,7 +122,7 @@
           </el-col>
         </el-row>
         <div class="submit-area">
-          <el-button size="large" class="action-btn" @click="resetLevel">重新生成关卡</el-button>
+          <el-button size="large" class="action-btn" :disabled="submitting" @click="resetLevel">重新生成关卡</el-button>
           <el-button
             type="primary"
             size="large"
@@ -211,6 +211,7 @@ function onDragLeave() {
   isDragOver.value = false;
 }
 function onDrop() {
+  if (submitting.value) return;
   isDragOver.value = false;
   if (draggingIndex.value !== null) {
     const option = availableOptions.value[draggingIndex.value];
@@ -219,10 +220,12 @@ function onDrop() {
   }
 }
 function addToAnswer(index) {
+  if (submitting.value) return;
   const option = availableOptions.value[index];
   if (option) levelStore.addOption(option);
 }
 function removeFromAnswer(index) {
+  if (submitting.value) return;
   levelStore.removeOption(levelStore.selectedOptions[index]);
 }
 
@@ -335,6 +338,19 @@ async function submitAnswer() {
   align-items: center;
   justify-content: space-between;
 }
+/* 提交中：选项区和答题区整体不可交互 */
+.answer-step.submitting {
+  pointer-events: none;
+  opacity: 0.55;
+  transition: opacity 0.2s;
+}
+/* 但提交按钮下方的加载区域和提示保持可操作视觉 */
+.answer-step.submitting .submit-area,
+.answer-step.submitting .submit-loading {
+  pointer-events: auto;
+  opacity: 1;
+}
+
 /* 两栏等高：el-row 拉伸子项 → el-col 等高 → card 撑满 col → 内容区撑满 body */
 .answer-area {
   align-items: stretch;

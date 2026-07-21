@@ -86,7 +86,7 @@
         <template #header>
           <span>📖 标准答案解析</span>
         </template>
-        <div class="standard-text">{{ report.standardAnswer }}</div>
+        <MarkdownViewer :content="report.standardAnswer" />
       </el-card>
 
       <!-- 操作按钮 -->
@@ -117,6 +117,7 @@ import { ref, computed, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import { useUserStore } from "../stores/user";
 import { getUserLevelDetail } from "../api";
+import MarkdownViewer from "../components/MarkdownViewer.vue";
 
 const route = useRoute();
 const userStore = useUserStore();

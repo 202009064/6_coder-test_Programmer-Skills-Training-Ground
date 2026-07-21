@@ -85,7 +85,7 @@ const userStore = useUserStore()
 
 function formatSalary(salary) {
   if (salary >= 10000) {
-    return (salary / 10000).toFixed(1) + ' 元/月'
+    return (salary / 10000).toFixed(1) + ' 万/月'
   }
   return salary + ' 元/月'
 }
