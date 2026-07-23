@@ -44,6 +44,7 @@ public class UserController {
     public BaseResponse<UserVO> login(@RequestBody UserLoginRequest request, HttpSession session) {
         try {
             UserVO userVO = userService.login(request);
+            // 记录用户的登录状态，即，从刚才成功的 UserVO 里面拿到用户的唯一 ID（例如 1001），通过 HttpSession 把它存入服务器内存中。
             session.setAttribute("userId", userVO.getId());
             return ResultUtils.success(userVO);
         } catch (Exception e) {
