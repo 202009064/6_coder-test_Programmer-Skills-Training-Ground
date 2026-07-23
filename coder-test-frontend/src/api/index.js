@@ -19,7 +19,12 @@ export function logout() {
 
 // 获取当前用户
 export function getCurrentUser() {
-    return request.get('/user/current')
+  return request.get('/user/current')
+}
+
+// 获取薪资排行榜
+export function getRankingList(limit = 30) {
+  return request.get('/user/ranking', { params: { limit } })
 }
 
 // ==================== 关卡接口 ====================

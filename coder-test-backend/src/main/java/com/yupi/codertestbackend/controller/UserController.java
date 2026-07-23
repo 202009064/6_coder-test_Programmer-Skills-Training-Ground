@@ -12,6 +12,8 @@ import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 用户 Controller
  */
@@ -85,6 +87,20 @@ public class UserController {
             return ResultUtils.success(userVO);
         } catch (Exception e) {
             log.error("获取当前用户信息失败", e);
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    /**
+     * 获取薪资排行榜（前30名，按薪资降序）
+     */
+    @GetMapping("/ranking")
+    public BaseResponse<List<UserVO>> ranking(@RequestParam(defaultValue = "30") Integer limit) {
+        try {
+            List<UserVO> users = userService.listTopUsers(limit);
+            return ResultUtils.success(users);
+        } catch (Exception e) {
+            log.error("查询排行榜失败", e);
             throw new RuntimeException(e.getMessage());
         }
     }

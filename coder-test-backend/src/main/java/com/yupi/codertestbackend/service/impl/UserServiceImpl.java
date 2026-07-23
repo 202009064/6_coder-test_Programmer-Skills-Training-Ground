@@ -12,6 +12,9 @@ import com.yupi.codertestbackend.model.vo.UserVO;
 import com.yupi.codertestbackend.service.UserService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
  * 用户 Service 实现
  */
@@ -22,10 +25,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      * 默认头像 URL 模板（根据用户 ID 取模固定分配）
      */
     private static final String[] DEFAULT_AVATARS = {
-        "https://api.dicebear.com/9.x/adventurer/svg?seed=warrior",
-        "https://api.dicebear.com/9.x/adventurer/svg?seed=knight",
-        "https://api.dicebear.com/9.x/adventurer/svg?seed=archer",
-        "https://api.dicebear.com/9.x/adventurer/svg?seed=mage"
+            "https://api.dicebear.com/9.x/adventurer/svg?seed=warrior",
+            "https://api.dicebear.com/9.x/adventurer/svg?seed=knight",
+            "https://api.dicebear.com/9.x/adventurer/svg?seed=archer",
+            "https://api.dicebear.com/9.x/adventurer/svg?seed=mage"
     };
 
     @Override
@@ -107,6 +110,17 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             throw new RuntimeException(ErrorCode.USER_NOT_FOUND.getMessage());
         }
         return toUserVO(user);
+    }
+
+    @Override
+    public List<UserVO> listTopUsers(Integer limit) {
+        int actualLimit = (limit != null && limit > 0) ? limit : 30;
+        List<User> users = lambdaQuery()
+                .orderByDesc(User::getSalary)
+                .orderByDesc(User::getCreateTime)
+                .last("LIMIT " + actualLimit)
+                .list();
+        return users.stream().map(this::toUserVO).collect(Collectors.toList());
     }
 
     /**
