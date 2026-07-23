@@ -1,5 +1,6 @@
 package com.yupi.codertestbackend.service.impl;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.spring.service.impl.ServiceImpl;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yupi.codertestbackend.ai.model.GeneratedLevel;
@@ -96,5 +97,61 @@ public class LevelServiceImpl extends ServiceImpl<LevelMapper, Level> implements
         } catch (Exception e) {
             throw new RuntimeException("JSON 序列化失败: " + e.getMessage(), e);
         }
+    }
+
+    // ==================== 管理员接口实现 ====================
+
+    @Override
+    public Page<Level> listLevels(Integer current, Integer size, String keyword, String difficulty, Integer priority) {
+        Page<Level> page = Page.of(current != null ? current : 1, size != null ? size : 10);
+        var wrapper = lambdaQuery();
+        // 关键字搜索：关卡名称模糊匹配
+        if (keyword != null && !keyword.isBlank()) {
+            wrapper.like(Level::getLevelName, keyword);
+        }
+        // 难度筛选
+        if (difficulty != null && !difficulty.isBlank()) {
+            wrapper.eq(Level::getDifficulty, difficulty);
+        }
+        // 优先级筛选
+        if (priority != null) {
+            wrapper.eq(Level::getPriority, priority);
+        }
+        return wrapper
+                .orderByDesc(Level::getPriority)
+                .orderByDesc(Level::getCreateTime)
+                .page(page);
+    }
+
+    @Override
+    public Level updateLevel(Level level) {
+        if (level == null || level.getId() == null) {
+            throw new RuntimeException(ErrorCode.PARAMS_ERROR.getMessage());
+        }
+        // 只更新非空字段
+        this.updateById(level);
+        return this.getById(level.getId());
+    }
+
+    @Override
+    public void deleteLevel(Long id) {
+        if (id == null) {
+            throw new RuntimeException(ErrorCode.PARAMS_ERROR.getMessage());
+        }
+        this.removeById(id);
+    }
+
+    @Override
+    public Level setLevelPriority(Long id, Integer priority) {
+        if (id == null || priority == null) {
+            throw new RuntimeException(ErrorCode.PARAMS_ERROR.getMessage());
+        }
+        Level level = this.getById(id);
+        if (level == null) {
+            throw new RuntimeException(ErrorCode.LEVEL_NOT_FOUND.getMessage());
+        }
+        level.setPriority(priority);
+        this.updateById(level);
+        return level;
     }
 }

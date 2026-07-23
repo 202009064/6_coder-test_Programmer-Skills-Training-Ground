@@ -31,7 +31,10 @@
               <el-dropdown-item command="/records">
                 <el-icon><Notebook /></el-icon>战功簿
               </el-dropdown-item>
-              <el-dropdown-item divided command="logout">
+              <el-dropdown-item v-if="userStore.isAdmin" divided command="/admin">
+                <el-icon><Setting /></el-icon>关卡管理
+              </el-dropdown-item>
+              <el-dropdown-item :divided="!userStore.isAdmin" command="logout">
                 <el-icon><SwitchButton /></el-icon>卸甲归田
               </el-dropdown-item>
             </el-dropdown-menu>

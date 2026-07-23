@@ -1,4 +1,5 @@
 package com.yupi.codertestbackend.model.vo;
+
 import java.time.LocalDateTime;
 
 /**
@@ -15,6 +16,8 @@ public class UserVO {
     private String avatar;
 
     private Integer salary;
+
+    private String userRole;
 
     private LocalDateTime createTime;
 
@@ -56,6 +59,14 @@ public class UserVO {
 
     public void setSalary(Integer salary) {
         this.salary = salary;
+    }
+
+    public String getUserRole() {
+        return userRole;
+    }
+
+    public void setUserRole(String userRole) {
+        this.userRole = userRole;
     }
 
     public LocalDateTime getCreateTime() {

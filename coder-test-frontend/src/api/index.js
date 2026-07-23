@@ -50,3 +50,25 @@ export function getUserLevelDetail(id) {
 export function listUserLevels(params) {
   return request.get('/user-level/list', { params })
 }
+
+// ==================== 管理员接口 ====================
+
+// 管理员分页查询所有关卡（支持关键字、难度、优先级筛选）
+export function listAllLevels(params) {
+  return request.get('/level/list', { params })
+}
+
+// 管理员更新关卡
+export function updateLevel(data) {
+  return request.put('/level/update', data)
+}
+
+// 管理员删除关卡
+export function deleteLevel(id) {
+  return request.delete('/level/delete', { params: { id } })
+}
+
+// 管理员设置关卡优先级（精选/置顶）
+export function setLevelPriority(id, priority) {
+  return request.put('/level/priority', null, { params: { id, priority } })
+}

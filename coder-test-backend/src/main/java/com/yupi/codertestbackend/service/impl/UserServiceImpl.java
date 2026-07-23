@@ -124,6 +124,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         }
         vo.setAvatar(avatar);
         vo.setSalary(user.getSalary());
+        vo.setUserRole(user.getUserRole() != null ? user.getUserRole() : "user");
         vo.setCreateTime(user.getCreateTime());
         return vo;
     }

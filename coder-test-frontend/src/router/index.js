@@ -13,6 +13,7 @@ const routes = [
       { path: 'records', component: () => import('../views/RecordsPage.vue'), meta: { title: '闯关记录' } },
       { path: 'login', component: () => import('../views/LoginPage.vue'), meta: { title: '入伍登录' } },
       { path: 'register', component: () => import('../views/RegisterPage.vue'), meta: { title: '报名从军' } },
+      { path: 'admin', component: () => import('../views/AdminManagePage.vue'), meta: { title: '关卡管理' } },
     ],
   },
 ]

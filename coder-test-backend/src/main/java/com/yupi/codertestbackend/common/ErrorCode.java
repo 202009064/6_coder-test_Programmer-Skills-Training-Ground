@@ -13,6 +13,7 @@ public enum ErrorCode {
     USER_NOT_FOUND(40002, "用户不存在"),
     PASSWORD_ERROR(40003, "密码错误"),
     LEVEL_NOT_FOUND(40004, "关卡不存在"),
+    FORBIDDEN(40005, "仅管理员可操作"),
     AI_ERROR(50001, "AI 服务调用失败");
 
     private final int code;

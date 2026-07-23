@@ -43,6 +43,11 @@ public class User {
      */
     private Integer salary = 10000;
 
+    /**
+     * 用户角色：user-普通用户，admin-管理员
+     */
+    private String userRole = "user";
+
     private LocalDateTime createTime;
 
     private LocalDateTime updateTime;
