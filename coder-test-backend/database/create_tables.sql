@@ -14,15 +14,16 @@ USE `coder-test`;
 -- 薪资字段用于动态调整关卡难度
 -- ============================================================
 CREATE TABLE IF NOT EXISTS `user` (
-    `id`          BIGINT       NOT NULL AUTO_INCREMENT COMMENT '主键',
-    `username`    VARCHAR(256) NOT NULL COMMENT '登录账号',
-    `password`    VARCHAR(512) NOT NULL COMMENT '登录密码',
-    `nickname`    VARCHAR(256) DEFAULT NULL COMMENT '用户昵称',
-    `avatar`      VARCHAR(512) DEFAULT NULL COMMENT '用户头像URL，默认随机分配',
-    `salary`      INT          NOT NULL DEFAULT 0 COMMENT '当前薪资（单位：元），用于动态调整关卡难度',
-    `createTime`  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
-    `updateTime`  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
-    `isDelete`    TINYINT      NOT NULL DEFAULT 0 COMMENT '逻辑删除（0-未删除，1-已删除）',
+    `id` BIGINT NOT NULL AUTO_INCREMENT COMMENT '主键',
+    `username` VARCHAR(256) NOT NULL COMMENT '登录账号',
+    `password` VARCHAR(512) NOT NULL COMMENT '登录密码',
+    `nickname` VARCHAR(256) DEFAULT NULL COMMENT '用户昵称',
+    `avatar` VARCHAR(512) DEFAULT NULL COMMENT '用户头像URL，默认随机分配',
+    `salary` INT NOT NULL DEFAULT 0 COMMENT '当前薪资（单位：元），用于动态调整关卡难度',
+    `userRole` VARCHAR(32) NOT NULL DEFAULT 'user' COMMENT '用户角色：user-普通用户，admin-管理员',
+    `createTime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+    `updateTime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+    `isDelete` TINYINT NOT NULL DEFAULT 0 COMMENT '逻辑删除（0-未删除，1-已删除）',
     PRIMARY KEY (`id`),
     UNIQUE INDEX `uk_username` (`username`),
     INDEX `idx_createTime` (`createTime`)
