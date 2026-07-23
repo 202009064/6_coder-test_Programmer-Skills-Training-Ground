@@ -71,6 +71,22 @@ public class LevelController {
         }
     }
 
+    /**
+     * 分页获取精选关卡（priority >= 999，供普通用户选择挑战）
+     */
+    @GetMapping("/featured")
+    public BaseResponse<Page<Level>> featured(
+            @RequestParam(defaultValue = "1") Integer current,
+            @RequestParam(defaultValue = "10") Integer size) {
+        try {
+            Page<Level> page = levelService.listFeaturedLevels(current, size);
+            return ResultUtils.success(page);
+        } catch (Exception e) {
+            log.error("查询精选关卡列表失败", e);
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
     // ==================== 管理员接口 ====================
 
     /**

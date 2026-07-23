@@ -35,6 +35,61 @@
             <LoadingArena v-if="generating" class="loading-area" />
           </div>
         </el-card>
+
+        <!-- 精选关卡选择区域 -->
+        <el-card shadow="hover" class="featured-card">
+          <template #header>
+            <div class="featured-header">
+              <span>
+                <el-icon :size="20" color="#cd9b1d"><Star /></el-icon>
+                精选关卡
+              </span>
+              <el-tag type="warning" size="small"
+                >{{ featuredTotal }} 关</el-tag
+              >
+            </div>
+          </template>
+          <div v-loading="featuredLoading" class="featured-body">
+            <el-empty
+              v-if="!featuredLoading && featuredLevels.length === 0"
+              description="暂无精选关卡"
+            />
+            <div v-else class="featured-grid">
+              <div
+                v-for="level in featuredLevels"
+                :key="level.id"
+                class="featured-item"
+                @click="selectFeaturedLevel(level)"
+              >
+                <div class="featured-item-header">
+                  <span class="featured-item-name">{{ level.levelName }}</span>
+                  <el-tag
+                    :type="levelDifficultyType(level.difficulty)"
+                    size="small"
+                    >{{ level.difficulty }}</el-tag
+                  >
+                </div>
+                <div class="featured-item-salary">
+                  目标薪资：{{ formatSalary(level.targetSalary) }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div
+            class="featured-pagination"
+            v-if="featuredTotal > featuredPageSize"
+          >
+            <el-pagination
+              v-model:current-page="featuredPage"
+              :page-size="featuredPageSize"
+              :total="featuredTotal"
+              layout="prev, pager, next"
+              small
+              background
+              @current-change="fetchFeaturedLevels"
+            />
+          </div>
+        </el-card>
       </div>
       <div v-else class="answer-step" :class="{ submitting }">
         <el-card shadow="hover" class="level-info-card">
@@ -122,7 +177,13 @@
           </el-col>
         </el-row>
         <div class="submit-area">
-          <el-button size="large" class="action-btn" :disabled="submitting" @click="resetLevel">重新生成关卡</el-button>
+          <el-button
+            size="large"
+            class="action-btn"
+            :disabled="submitting"
+            @click="resetLevel"
+            >重新生成关卡</el-button
+          >
           <el-button
             type="primary"
             size="large"
@@ -150,7 +211,11 @@ import { ref, computed, onMounted, nextTick } from "vue";
 import { useRouter } from "vue-router";
 import { useUserStore } from "../stores/user";
 import { useLevelStore } from "../stores/level";
-import { generateLevel as generateLevelApi, submitLevel } from "../api";
+import {
+  generateLevel as generateLevelApi,
+  submitLevel,
+  listFeaturedLevels,
+} from "../api";
 import { ElMessage } from "element-plus";
 import LoadingArena from "../components/LoadingArena.vue";
 
@@ -162,12 +227,20 @@ const submitLoadingRef = ref(null);
 // 每次进入页面都清空上次的关卡状态，确保重新走「生成关卡」流程
 onMounted(() => {
   levelStore.clearLevel();
+  fetchFeaturedLevels();
 });
 
 const generating = ref(false);
 const submitting = ref(false);
 const draggingIndex = ref(null);
 const isDragOver = ref(false);
+
+// 精选关卡
+const featuredLevels = ref([]);
+const featuredPage = ref(1);
+const featuredPageSize = ref(6);
+const featuredTotal = ref(0);
+const featuredLoading = ref(false);
 
 const allOptions = computed(() => {
   try {
@@ -194,6 +267,37 @@ const difficultyType = computed(() => {
 function formatSalary(salary) {
   if (salary >= 10000) return (salary / 10000).toFixed(1) + " 万/月";
   return salary + " 元/月";
+}
+
+// 精选难度标签颜色
+function levelDifficultyType(difficulty) {
+  if (difficulty === "简单") return "success";
+  if (difficulty === "中等") return "warning";
+  if (difficulty === "困难") return "danger";
+  return "";
+}
+
+// 加载精选关卡
+async function fetchFeaturedLevels() {
+  featuredLoading.value = true;
+  try {
+    const res = await listFeaturedLevels({
+      current: featuredPage.value,
+      size: featuredPageSize.value,
+    });
+    featuredLevels.value = res.data.records || [];
+    featuredTotal.value = res.data.total || 0;
+  } catch {
+    // 静默失败，精选关卡非必须
+  } finally {
+    featuredLoading.value = false;
+  }
+}
+
+// 选择精选关卡开始挑战
+function selectFeaturedLevel(level) {
+  levelStore.setLevel(level);
+  ElMessage.success(`已选择关卡：${level.levelName}`);
 }
 
 function onDragStart(index) {
@@ -254,7 +358,10 @@ async function submitAnswer() {
   submitting.value = true;
   // 等待加载区域渲染后滚动到可视区，确保用户能看到提示和进度条
   await nextTick();
-  submitLoadingRef.value?.scrollIntoView({ behavior: "smooth", block: "center" });
+  submitLoadingRef.value?.scrollIntoView({
+    behavior: "smooth",
+    block: "center",
+  });
   try {
     const res = await submitLevel({
       levelId: levelStore.currentLevel.id,
@@ -479,5 +586,67 @@ async function submitAnswer() {
 }
 .action-btn {
   width: 180px;
+}
+
+/* 精选关卡 */
+.featured-card {
+  margin-top: 24px;
+}
+.featured-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--sand-darker);
+}
+.featured-header span {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.featured-body {
+  min-height: 80px;
+}
+.featured-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.featured-item {
+  padding: 14px 16px;
+  border: 1px solid var(--sand-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.featured-item:hover {
+  border-color: var(--sand-accent);
+  background: rgba(184, 134, 11, 0.06);
+}
+.featured-item-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+.featured-item-name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--sand-darker);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+.featured-item-salary {
+  margin-top: 6px;
+  font-size: 13px;
+  color: var(--el-text-color-secondary);
+}
+.featured-pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
 }
 </style>

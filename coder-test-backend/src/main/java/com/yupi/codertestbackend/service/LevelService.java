@@ -18,6 +18,11 @@ public interface LevelService extends IService<Level> {
     Level generateLevel(Integer salary);
 
     /**
+     * 分页获取精选关卡（priority >= 999），按优先级和创建时间降序
+     */
+    Page<Level> listFeaturedLevels(Integer current, Integer size);
+
+    /**
      * 管理员分页查询所有关卡（支持按名称、难度、优先级筛选）
      */
     Page<Level> listLevels(Integer current, Integer size, String keyword, String difficulty, Integer priority);

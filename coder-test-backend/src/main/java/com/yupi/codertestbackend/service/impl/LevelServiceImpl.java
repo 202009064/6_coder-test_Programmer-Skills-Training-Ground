@@ -102,6 +102,16 @@ public class LevelServiceImpl extends ServiceImpl<LevelMapper, Level> implements
     // ==================== 管理员接口实现 ====================
 
     @Override
+    public Page<Level> listFeaturedLevels(Integer current, Integer size) {
+        Page<Level> page = Page.of(current != null ? current : 1, size != null ? size : 10);
+        return lambdaQuery()
+                .ge(Level::getPriority, 999)
+                .orderByDesc(Level::getPriority)
+                .orderByDesc(Level::getCreateTime)
+                .page(page);
+    }
+
+    @Override
     public Page<Level> listLevels(Integer current, Integer size, String keyword, String difficulty, Integer priority) {
         Page<Level> page = Page.of(current != null ? current : 1, size != null ? size : 10);
         var wrapper = lambdaQuery();
