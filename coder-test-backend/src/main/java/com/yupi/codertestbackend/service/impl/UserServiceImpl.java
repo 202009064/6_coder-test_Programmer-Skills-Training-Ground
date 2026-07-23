@@ -18,6 +18,16 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
+    /**
+     * 默认头像 URL 模板（根据用户 ID 取模固定分配）
+     */
+    private static final String[] DEFAULT_AVATARS = {
+        "https://api.dicebear.com/9.x/adventurer/svg?seed=warrior",
+        "https://api.dicebear.com/9.x/adventurer/svg?seed=knight",
+        "https://api.dicebear.com/9.x/adventurer/svg?seed=archer",
+        "https://api.dicebear.com/9.x/adventurer/svg?seed=mage"
+    };
+
     @Override
     public UserVO register(UserRegisterRequest request) {
         String username = request.getUsername();
@@ -46,12 +56,16 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 加密密码
         String encryptedPassword = DigestUtil.md5Hex(password);
 
-        // 保存用户
+        // 保存用户（先保存以获取自增 ID）
         User user = new User();
         user.setUsername(username);
         user.setPassword(encryptedPassword);
         user.setNickname(request.getNickname() != null ? request.getNickname() : username);
         this.save(user);
+
+        // 根据用户 ID 固定分配头像（4 选 1），确保同一用户每次查询头像一致
+        user.setAvatar(DEFAULT_AVATARS[(int) (user.getId() % DEFAULT_AVATARS.length)]);
+        this.updateById(user);
 
         return toUserVO(user);
     }
@@ -103,6 +117,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         vo.setId(user.getId());
         vo.setUsername(user.getUsername());
         vo.setNickname(user.getNickname());
+        // 头像为空时（老用户），根据 ID 固定分配默认头像
+        String avatar = user.getAvatar();
+        if (avatar == null || avatar.isBlank()) {
+            avatar = DEFAULT_AVATARS[(int) (user.getId() % DEFAULT_AVATARS.length)];
+        }
+        vo.setAvatar(avatar);
         vo.setSalary(user.getSalary());
         vo.setCreateTime(user.getCreateTime());
         return vo;

@@ -11,7 +11,12 @@
         </el-tag>
         <el-dropdown trigger="click" @command="handleCommand">
           <span class="nickname-trigger">
-            <el-icon><User /></el-icon>
+            <img
+              :src="userStore.user?.avatar"
+              class="user-avatar"
+              @error="onAvatarError"
+              alt="头像"
+            />
             {{ userStore.user?.nickname || userStore.user?.username }}
             <el-icon class="caret"><CaretBottom /></el-icon>
           </span>
@@ -52,6 +57,11 @@ const router = useRouter()
 const userStore = useUserStore()
 const levelStore = useLevelStore()
 const logoutLoading = ref(false)
+
+// 头像加载失败时的 fallback：显示首字符作为占位
+function onAvatarError(e) {
+  e.target.style.display = 'none'
+}
 
 function formatSalary(salary) {
   if (salary >= 10000) {
@@ -139,6 +149,15 @@ function handleCommand(command) {
   padding: 6px 12px;
   border-radius: 4px;
   outline: none;
+}
+
+.user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid var(--sand-accent);
+  flex-shrink: 0;
 }
 
 .nickname-trigger:hover {

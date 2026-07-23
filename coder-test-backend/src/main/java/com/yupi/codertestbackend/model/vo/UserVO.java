@@ -12,6 +12,8 @@ public class UserVO {
 
     private String nickname;
 
+    private String avatar;
+
     private Integer salary;
 
     private LocalDateTime createTime;
@@ -38,6 +40,14 @@ public class UserVO {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
     }
 
     public Integer getSalary() {

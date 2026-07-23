@@ -18,6 +18,7 @@ CREATE TABLE IF NOT EXISTS `user` (
     `username`    VARCHAR(256) NOT NULL COMMENT '登录账号',
     `password`    VARCHAR(512) NOT NULL COMMENT '登录密码',
     `nickname`    VARCHAR(256) DEFAULT NULL COMMENT '用户昵称',
+    `avatar`      VARCHAR(512) DEFAULT NULL COMMENT '用户头像URL，默认随机分配',
     `salary`      INT          NOT NULL DEFAULT 0 COMMENT '当前薪资（单位：元），用于动态调整关卡难度',
     `createTime`  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updateTime`  DATETIME     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
@@ -76,3 +77,12 @@ CREATE TABLE IF NOT EXISTS `user_level` (
     INDEX `idx_score` (`score`),
     INDEX `idx_createTime` (`createTime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='用户关卡表';
+
+-- ============================================================
+-- 数据库迁移脚本（现有数据库升级用）
+-- ============================================================
+
+-- 给用户表新增头像字段（如果不存在）
+ALTER TABLE `user`
+    ADD COLUMN IF NOT EXISTS `avatar` VARCHAR(512) DEFAULT NULL COMMENT '用户头像URL，默认随机分配'
+    AFTER `nickname`;

@@ -23,7 +23,7 @@
 ./mvnw.cmd verify          # Windows
 
 # 启动应用（端口 8123，上下文路径 /api）
-./mvnw spring-boot:run
+cd e:\devlop\work\6_coder-test\coder-test-backend; .\mvnw.cmd spring-boot:run
 
 # 运行全部测试
 ./mvnw test

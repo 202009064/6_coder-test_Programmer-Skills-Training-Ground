@@ -34,6 +34,11 @@ public class User {
     private String nickname;
 
     /**
+     * 用户头像 URL
+     */
+    private String avatar;
+
+    /**
      * 当前薪资（单位：元），用于动态调整关卡难度
      */
     private Integer salary = 10000;
