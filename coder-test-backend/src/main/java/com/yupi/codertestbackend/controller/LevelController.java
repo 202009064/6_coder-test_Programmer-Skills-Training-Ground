@@ -49,7 +49,7 @@ public class LevelController {
             if (request == null || request.getSalary() == null) {
                 throw new RuntimeException(ErrorCode.PARAMS_ERROR.getMessage());
             }
-            Level level = levelService.generateLevel(request.getSalary());
+            Level level = levelService.generateLevel(request.getSalary(), request.getDirection());
             return ResultUtils.success(level);
         } catch (Exception e) {
             log.error("AI 生成关卡失败, salary={}", request != null ? request.getSalary() : null, e);
@@ -163,6 +163,7 @@ public class LevelController {
      */
     public static class SalaryRequest {
         private Integer salary;
+        private String direction;
 
         public Integer getSalary() {
             return salary;
@@ -170,6 +171,14 @@ public class LevelController {
 
         public void setSalary(Integer salary) {
             this.salary = salary;
+        }
+
+        public String getDirection() {
+            return direction;
+        }
+
+        public void setDirection(String direction) {
+            this.direction = direction;
         }
     }
 }

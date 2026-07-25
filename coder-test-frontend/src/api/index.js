@@ -30,8 +30,8 @@ export function getRankingList(limit = 30) {
 // ==================== 关卡接口 ====================
 
 // AI 生成关卡（根据薪资动态调整难度）
-export function generateLevel(salary) {
-    return request.post('/level/generate', { salary })
+export function generateLevel(salary, direction) {
+  return request.post('/level/generate', { salary, direction })
 }
 
 // 查询关卡详情

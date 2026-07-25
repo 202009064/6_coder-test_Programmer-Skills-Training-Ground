@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS `level` (
     `difficulty` VARCHAR(256) NOT NULL COMMENT '关卡难度（简单，中等，困难）',
     `targetSalary` INT NOT NULL DEFAULT 10000 COMMENT '目标薪资（单位：元），用于动态调整关卡难度',
     `priority` INT NOT NULL DEFAULT 0 COMMENT '关卡优先级：0-普通，99-推荐，999-精选，9999-置顶',
+    `direction` VARCHAR(256) DEFAULT NULL COMMENT '学习方向（如：前端开发、Java后端开发、软件测试等）',
     `createTime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updateTime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     `isDelete` TINYINT NOT NULL DEFAULT 0 COMMENT '逻辑删除（0-未删除，1-已删除）',
@@ -70,6 +71,7 @@ CREATE TABLE IF NOT EXISTS `user_level` (
     `reason` TEXT DEFAULT NULL COMMENT '评分原因',
     `trueOptions` TEXT DEFAULT NULL COMMENT '正确选项（JSON）',
     `standardAnswer` TEXT DEFAULT NULL COMMENT '标准答案解析（对正确选项的详细解析）',
+    `direction` VARCHAR(256) DEFAULT NULL COMMENT '学习方向（如：前端开发、Java后端开发、软件测试等）',
     `createTime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
     `updateTime` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
     `isDelete` TINYINT NOT NULL DEFAULT 0 COMMENT '逻辑删除（0-未删除，1-已删除）',
@@ -93,6 +95,14 @@ ADD COLUMN IF NOT EXISTS `avatar` VARCHAR(512) DEFAULT NULL COMMENT '用户头�
 ALTER TABLE `level`
 ADD COLUMN IF NOT EXISTS `priority` INT NOT NULL DEFAULT 0 COMMENT '关卡优先级：0-普通，99-推荐，999-精选，9999-置顶' AFTER `targetSalary`;
 
+-- 给关卡表新增学习方向字段（如果不存在）
+ALTER TABLE `level`
+ADD COLUMN IF NOT EXISTS `direction` VARCHAR(256) DEFAULT NULL COMMENT '学习方向（如：前端开发、Java后端开发、软件测试等）' AFTER `priority`;
+
 -- 给用户表新增用户角色字段（如果不存在）
 ALTER TABLE `user`
 ADD COLUMN IF NOT EXISTS `userRole` VARCHAR(32) NOT NULL DEFAULT 'user' COMMENT '用户角色：user-普通用户，admin-管理员' AFTER `salary`;
+
+-- 给用户关卡表新增学习方向字段（如果不存在）
+ALTER TABLE `user_level`
+ADD COLUMN IF NOT EXISTS `direction` VARCHAR(256) DEFAULT NULL COMMENT '学习方向（如：前端开发、Java后端开发、软件测试等）' AFTER `standardAnswer`;

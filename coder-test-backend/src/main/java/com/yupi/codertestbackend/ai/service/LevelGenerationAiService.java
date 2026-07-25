@@ -18,6 +18,7 @@ public interface LevelGenerationAiService {
             - 题目方向：{{questionType}}
             - 技术栈：{{techStack}}
             - 关卡难度：{{difficulty}}
+            - 学习方向：{{direction}}
 
             请直接返回 JSON，不需要额外解释。
             """
@@ -27,6 +28,7 @@ public interface LevelGenerationAiService {
             @V("targetSalary") Integer targetSalary,
             @V("questionType") String questionType,
             @V("techStack") String techStack,
-            @V("difficulty") String difficulty
+            @V("difficulty") String difficulty,
+            @V("direction") String direction
         );
 }

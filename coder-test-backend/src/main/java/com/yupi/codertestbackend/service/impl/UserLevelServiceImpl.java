@@ -59,7 +59,8 @@ public class UserLevelServiceImpl extends ServiceImpl<UserLevelMapper, UserLevel
                     level.getLevelDesc(),
                     request.getUserOptions(),
                     level.getTrueOptions(),
-                    user.getSalary());
+                    user.getSalary(),
+                    level.getDirection() != null ? level.getDirection() : "");
         } catch (Exception e) {
             throw new RuntimeException("AI 评估失败: " + e.getMessage(), e);
         }
@@ -89,6 +90,7 @@ public class UserLevelServiceImpl extends ServiceImpl<UserLevelMapper, UserLevel
         userLevel.setReason(reason);
         userLevel.setTrueOptions(level.getTrueOptions());
         userLevel.setStandardAnswer(standardAnswer);
+        userLevel.setDirection(level.getDirection());
         userLevel.setCreateTime(LocalDateTime.now());
         userLevel.setUpdateTime(LocalDateTime.now());
 

@@ -8,6 +8,12 @@
     <div v-else-if="report" class="report-content">
       <!-- 分数卡片 -->
       <el-card shadow="hover" class="score-card">
+        <div class="report-direction">
+          <el-tag v-if="report.direction" size="small" effect="plain">{{
+            report.direction
+          }}</el-tag>
+          <el-tag v-else size="small" effect="plain">全栈开发</el-tag>
+        </div>
         <div class="score-circle">
           <el-progress
             type="dashboard"
@@ -203,6 +209,9 @@ onMounted(async () => {
   text-align: center;
   margin-bottom: 20px;
   padding: 30px 0;
+}
+.report-direction {
+  margin-bottom: 10px;
 }
 .score-circle {
   margin-bottom: 10px;

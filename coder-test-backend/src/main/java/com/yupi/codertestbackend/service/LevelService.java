@@ -10,12 +10,13 @@ import com.yupi.codertestbackend.model.entity.Level;
 public interface LevelService extends IService<Level> {
 
     /**
-     * AI 生成关卡（根据用户薪资动态调整难度）
+     * AI 生成关卡（根据用户薪资和选择的方向动态调整难度）
      *
-     * @param salary 用户当前薪资（单位：元）
+     * @param salary    用户当前薪资（单位：元）
+     * @param direction 学习方向（如：前端开发、Java后端开发等）
      * @return 生成的关卡
      */
-    Level generateLevel(Integer salary);
+    Level generateLevel(Integer salary, String direction);
 
     /**
      * 分页获取精选关卡（priority >= 999），按优先级和创建时间降序

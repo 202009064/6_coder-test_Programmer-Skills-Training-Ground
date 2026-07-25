@@ -68,6 +68,11 @@ public class UserLevel {
      */
     private String standardAnswer;
 
+    /**
+     * 学习方向（如：前端开发、Java后端开发等）
+     */
+    private String direction;
+
     private LocalDateTime createTime;
 
     private LocalDateTime updateTime;

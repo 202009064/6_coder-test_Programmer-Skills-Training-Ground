@@ -53,6 +53,11 @@ public class Level {
      */
     private Integer priority = 0;
 
+    /**
+     * 学习方向（如：前端开发、Java后端开发、软件测试等）
+     */
+    private String direction;
+
     private LocalDateTime createTime;
 
     private LocalDateTime updateTime;

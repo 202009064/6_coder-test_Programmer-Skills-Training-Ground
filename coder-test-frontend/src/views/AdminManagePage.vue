@@ -73,6 +73,14 @@
           }}</el-tag>
         </template>
       </el-table-column>
+      <el-table-column prop="direction" label="方向" width="130" align="center">
+        <template #default="{ row }">
+          <el-tag v-if="row.direction" type="info" size="small">{{
+            row.direction
+          }}</el-tag>
+          <span v-else class="no-direction">全栈开发</span>
+        </template>
+      </el-table-column>
       <el-table-column
         prop="targetSalary"
         label="目标薪资"
@@ -429,6 +437,10 @@ onMounted(() => {
 .level-name {
   color: var(--sand-accent);
   cursor: default;
+}
+
+.no-direction {
+  color: var(--el-text-color-placeholder);
 }
 
 .pagination-wrapper {

@@ -41,10 +41,12 @@ public class LevelServiceImpl extends ServiceImpl<LevelMapper, Level> implements
             "Spring Cloud + Nacos + Sentinel");
 
     @Override
-    public Level generateLevel(Integer salary) {
+    public Level generateLevel(Integer salary, String direction) {
         if (salary == null || salary <= 0) {
             throw new RuntimeException(ErrorCode.PARAMS_ERROR.getMessage());
         }
+        // 默认方向
+        String actualDirection = (direction != null && !direction.isBlank()) ? direction : "全栈开发";
 
         // 计算目标薪资：在当前薪资基础上浮动 ±30%
         int delta = (int) (salary * 0.3 * (RANDOM.nextDouble() * 2 - 1));
@@ -68,7 +70,7 @@ public class LevelServiceImpl extends ServiceImpl<LevelMapper, Level> implements
         GeneratedLevel generated;
         try {
             generated = levelGenerationAiService.generateLevel(
-                    salary, targetSalary, questionType, techStack, difficulty);
+                    salary, targetSalary, questionType, techStack, difficulty, actualDirection);
         } catch (Exception e) {
             throw new RuntimeException("AI 生成关卡失败: " + e.getMessage(), e);
         }
@@ -86,6 +88,7 @@ public class LevelServiceImpl extends ServiceImpl<LevelMapper, Level> implements
         level.setTrueOptions(toJson(generated.getTrueOptions()));
         level.setDifficulty(generated.getDifficulty());
         level.setTargetSalary(generated.getTargetSalary());
+        level.setDirection(actualDirection);
         this.save(level);
 
         return level;

@@ -20,6 +20,23 @@
               <strong>{{ formatSalary(userStore.salary) }}</strong
               >，AI 将为您生成对应难度的关卡
             </p>
+            <!-- 学习方向选择 -->
+            <div class="direction-select">
+              <span class="direction-label">选择学习方向：</span>
+              <el-select
+                v-model="direction"
+                placeholder="请选择岗位方向"
+                size="large"
+                style="width: 200px"
+              >
+                <el-option
+                  v-for="d in directionOptions"
+                  :key="d"
+                  :label="d"
+                  :value="d"
+                />
+              </el-select>
+            </div>
             <el-button
               type="primary"
               size="large"
@@ -71,6 +88,10 @@
                 </div>
                 <div class="featured-item-salary">
                   目标薪资：{{ formatSalary(level.targetSalary) }}
+                </div>
+                <div class="featured-item-direction">
+                  <el-icon :size="13"><Aim /></el-icon>
+                  {{ level.direction || "全栈开发" }}
                 </div>
               </div>
             </div>
@@ -235,6 +256,22 @@ const submitting = ref(false);
 const draggingIndex = ref(null);
 const isDragOver = ref(false);
 
+// 学习方向
+const direction = ref("Java后端开发");
+const directionOptions = [
+  "Java后端开发",
+  "前端开发",
+  "Python后端开发",
+  "软件测试",
+  "AI算法",
+  "网络运维",
+  "数据分析",
+  "移动端开发",
+  "DevOps运维",
+  "网络安全",
+  "游戏开发",
+];
+
 // 精选关卡
 const featuredLevels = ref([]);
 const featuredPage = ref(1);
@@ -336,7 +373,7 @@ function removeFromAnswer(index) {
 async function generateLevel() {
   generating.value = true;
   try {
-    const res = await generateLevelApi(userStore.salary);
+    const res = await generateLevelApi(userStore.salary, direction.value);
     levelStore.setLevel(res.data);
     ElMessage.success("关卡生成成功！");
   } catch (e) {
@@ -401,6 +438,17 @@ async function submitAnswer() {
   color: var(--sand-dark);
   margin-bottom: 24px;
   font-size: 15px;
+}
+.direction-select {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.direction-label {
+  font-size: 15px;
+  color: var(--sand-darker);
 }
 .generating-hint {
   margin-top: 16px;
@@ -643,6 +691,14 @@ async function submitAnswer() {
   margin-top: 6px;
   font-size: 13px;
   color: var(--el-text-color-secondary);
+}
+.featured-item-direction {
+  margin-top: 4px;
+  font-size: 12px;
+  color: #8b7355;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 .featured-pagination {
   display: flex;
