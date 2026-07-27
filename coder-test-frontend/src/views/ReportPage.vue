@@ -180,7 +180,7 @@ onMounted(async () => {
 
 <style scoped>
 .report-page {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
   padding-bottom: 40px;
 }

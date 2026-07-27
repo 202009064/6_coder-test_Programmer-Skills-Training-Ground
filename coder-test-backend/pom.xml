@@ -81,6 +81,13 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- Jsoup HTML 解析（面试题搜索工具用） -->
+		<dependency>
+			<groupId>org.jsoup</groupId>
+			<artifactId>jsoup</artifactId>
+			<version>1.18.1</version>
+		</dependency>
+
 		<!-- LangChain4j DashScope（阿里云百炼） -->
 		<dependency>
 			<groupId>dev.langchain4j</groupId>

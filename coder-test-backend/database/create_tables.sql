@@ -105,4 +105,6 @@ ADD COLUMN IF NOT EXISTS `userRole` VARCHAR(32) NOT NULL DEFAULT 'user' COMMENT 
 
 -- 给用户关卡表新增学习方向字段（如果不存在）
 ALTER TABLE `user_level`
-ADD COLUMN IF NOT EXISTS `direction` VARCHAR(256) DEFAULT NULL COMMENT '学习方向（如：前端开发、Java后端开发、软件测试等）' AFTER `standardAnswer`;
+ADD COLUMN `direction` VARCHAR(256) DEFAULT '全栈开发' 
+COMMENT '学习方向（如：前端开发、Java后端开发、软件测试等）' 
+AFTER `standardAnswer`;

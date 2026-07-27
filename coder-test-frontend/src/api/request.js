@@ -4,7 +4,7 @@ import { useUserStore } from '../stores/user'
 
 const request = axios.create({
   baseURL: '/api',
-  timeout: 120000,
+  timeout: 600000,
   withCredentials: true,
 })
 

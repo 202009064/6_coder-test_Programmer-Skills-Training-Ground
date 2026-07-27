@@ -2,6 +2,7 @@ package com.yupi.codertestbackend.ai.config;
 
 import com.yupi.codertestbackend.ai.service.LevelGenerationAiService;
 import com.yupi.codertestbackend.ai.service.ResultEvaluationAiService;
+import com.yupi.codertestbackend.ai.tool.InterviewQuestionTool;
 import dev.langchain4j.community.model.dashscope.QwenChatModel;
 import dev.langchain4j.service.AiServices;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,6 +44,9 @@ public class AiConfig {
 
     @Bean
     public ResultEvaluationAiService resultEvaluationAiService(QwenChatModel model) {
-        return AiServices.create(ResultEvaluationAiService.class, model);
+        return AiServices.builder(ResultEvaluationAiService.class)
+                .chatModel(model)
+                .tools(new InterviewQuestionTool())
+                .build();
     }
 }
