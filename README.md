@@ -4,7 +4,7 @@
 
 ## 项目概述
 
-**程序员技术练兵场（coder-test）** 项目，基于鱼皮（Codefather）的「AI + 全栈项目」课程构建。后端采用 **Spring Boot 3.x + Java 21 单体应用**架构。
+**程序员技术练兵场（coder-test）** 项目，基于鱼皮（Codefather）的「AI + 全栈项目 - AI 程序员技术练兵场」课程构建。后端采用 **Spring Boot 3.x + Java 21 单体应用**架构。
 
 ## 技术栈
 
