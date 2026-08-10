@@ -1,5 +1,6 @@
 ### CUSTOM ###
-application-local.yml # 本地环境配置，千万不要开源
+# 本地环境配置，千万不要开源
+application-local.yml
 
 
 HELP.md
